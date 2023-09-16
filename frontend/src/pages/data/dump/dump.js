@@ -1,6 +1,7 @@
 import { Dialog, Notify } from 'quasar'
 import Vue from 'vue'
 import YAML from 'js-yaml'
+import * as xml2js from 'xml2js';
 
 import VulnerabilityService from '@/services/vulnerability'
 import UserService from '@/services/user'
@@ -145,6 +146,39 @@ export default {
                                 return;
                             }
                         }
+                        // file deepcode ignore DuplicateIfBody: <please specify a reason of ignoring this>
+                        else if (ext === "nessus") {
+                            try {
+                                var parsedxml;
+                                parsedxml= nessus2XML(fileReader.result)
+                                vulnFile = JSON.parse(parsedxml);
+                                if (typeof vulnFile === 'object') {
+                                    if (Array.isArray(vulnFile)) {
+                                        if (vulnFile.length > 0 && vulnFile[0].id)
+                                            this.vulnerabilities = this.parseNessus(vulnFile);
+                                        else
+                                            this.vulnerabilities = vulnFile;
+                                    }
+                                    else
+                                        this.vulnerabilities.push(vulnFile);
+                                }
+                                else
+                                    throw new Error ($t('err.invalidJsonFormat'))
+                            }
+                            catch(err) {
+                                console.log(err);
+                                var errMsg = err;
+                                if (err.message) errMsg = $t('err.parsingError1',[err.message]);
+                                Notify.create({
+                                    message: errMsg,
+                                    color: 'negative',
+                                    textColor: 'white',
+                                    position: 'top-right'
+                                })
+                                return;
+                            }
+                        }
+
                         else
                             console.log('Bad Extension')
                         pending--;
@@ -154,6 +188,75 @@ export default {
                     fileReader.readAsText(file);
                 })(files[i])
             }
+        },
+        nessus2XML: function(xmlData)
+        {
+            xml2js.parseString(xmlData, (err, result) => {
+                if (err) {
+                console.error('Error parsing Nessus XML:', err);
+                process.exit(1); // Exit with an error code
+                }
+            
+                // Access the parsed data
+                const nessusReport = result.NessusClientData_v2.Report[0];
+            
+                // Create an object to hold the transformed data
+                const transformedData = {};
+            
+                // Initialize an ID counter
+                let idCounter = 1;
+            
+                nessusReport.ReportHost.forEach((host) => {
+                const hostNameParts = host.$.name.split(' '); // Assuming the name contains the IP address
+                const ipAddress = hostNameParts[0];
+            
+                host.ReportItem.forEach((item) => {
+                    // Check if the properties exist before accessing them
+                    const title = item.plugin_name[0];
+                    const description = item.description ? item.description[0] : null;
+                    const observation = item.synopsis ? item.synopsis[0] : null;
+                    const remediation = item.solution ? item.solution[0] : null;
+                    const references = item.see_also ? item.see_also[0] : null;
+                    const cvssSeverity = item.risk_factor ? item.risk_factor[0] : null;
+                    const cvssv3 = item.cvss3_vector ? item.cvss3_vector[0] : null;
+                    const cvssScore = item.cvss3_base_score ? item.cvss3_base_score[0] : null;
+            
+                    // Create a unique key for each vulnerability combining title, remediation, references, cvssScore, and description
+                    const vulnerabilityKey = `${title}_${remediation}_${references}_${cvssScore}_${cvssSeverity}_${description}`;
+            
+                    // Create an object for the vulnerability if it doesn't exist
+                    if (!transformedData[vulnerabilityKey]) {
+                    transformedData[vulnerabilityKey] = {
+                        id: idCounter++,
+                        title: title,
+                        remediation: remediation,
+                        references: references,
+                        cvssScore: cvssScore,
+                        cvssSeverity: cvssSeverity,
+                        description: description,
+                        cvssv3 : cvssv3,
+                        observation: observation,
+                        affected_hosts: [],
+                    };
+                    }
+            
+                    // Add the host IP address to the affected_hosts array if not already present
+                    if (!transformedData[vulnerabilityKey].affected_hosts.includes(ipAddress)) {
+                    transformedData[vulnerabilityKey].affected_hosts.push(ipAddress);
+                    }
+                });
+                });
+            
+                // Convert the transformedData object to an array
+                const transformedArray = Object.values(transformedData);
+            
+                // Write the transformed JSON data to the output file
+                const jsonData = JSON.stringify(transformedArray, null, 2);
+                var outdata;
+                outdata = JSON.parse(jsonData);
+                
+            });
+            return outdata;
         },
 
         parseSerpico: function(vulnerabilities) {
@@ -169,6 +272,35 @@ export default {
                 details.vulnType = this.formatSerpicoText(vuln.type);
                 details.description = this.formatSerpicoText(vuln.overview);
                 details.observation = this.formatSerpicoText(vuln.poc);
+                details.remediation = this.formatSerpicoText(vuln.remediation);
+                details.references = []
+                if (vuln.references && vuln.references !== "") {
+                    vuln.references = vuln.references.replace(/<paragraph>/g, '')
+                    details.references = vuln.references.split('</paragraph>').filter(Boolean)
+                }
+                tmpVuln.details = [details];
+                
+                result.push(tmpVuln);
+            });
+            
+            return result;
+        },
+
+        parseNessus: function(vulnerabilities) {
+            var result = [];
+            vulnerabilities.forEach(vuln => {
+                var tmpVuln = {};
+                tmpVuln.cvssv3 = vuln.cvssv3 || null;
+                tmpVuln.priority = null;
+                tmpVuln.remediationComplexity = null;
+                tmpVuln.cvssScore = vuln.cvssScore || null;
+                tmpVuln.cvssSeverity = vuln.cvssSeverity;
+                var details = {};
+                details.locale = this.formatSerpicoText(vuln.language) || 'en';
+                details.title = this.formatSerpicoText(vuln.title);
+                details.vulnType = this.formatSerpicoText(vuln.type) || 'Nessus';
+                details.description = this.formatSerpicoText(vuln.description);
+                details.observation = this.formatSerpicoText(vuln.observation);
                 details.remediation = this.formatSerpicoText(vuln.remediation);
                 details.references = []
                 if (vuln.references && vuln.references !== "") {
