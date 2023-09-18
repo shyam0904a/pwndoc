@@ -31,7 +31,7 @@ module.exports = function(request, app) {
           .set('Cookie', [
             `token=JWT ${userToken}`
           ])
-          .send(company)
+          .send([company])
 
         expect(response.status).toBe(201)
         company1Id = response.body.datas._id
@@ -43,7 +43,7 @@ module.exports = function(request, app) {
           .set('Cookie', [
             `token=JWT ${userToken}`
           ])
-          .send(company)
+          .send([company])
 
         expect(response.status).toBe(201)
         company2Id = response.body.datas._id
@@ -55,7 +55,7 @@ module.exports = function(request, app) {
           .set('Cookie', [
             `token=JWT ${userToken}`
           ])
-          .send(company)
+          .send([company])
 
         expect(response.status).toBe(422)
       })
@@ -72,6 +72,12 @@ module.exports = function(request, app) {
       
         expect(response.status).toBe(200)
         expect(response.body.datas.map(t => {return {name: t.name, logo: t.logo}})).toEqual(expect.arrayContaining(expected))
+        var response = await request(app).get('/api/companies')
+        .set('Cookie', [
+          `token=JWT ${userToken}`
+        ])
+        company1Id = response.body.datas[0]._id
+        company2Id = response.body.datas[0]._id
       })
 
       it('Update company with logo only', async () => {

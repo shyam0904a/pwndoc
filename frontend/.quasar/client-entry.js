@@ -18,6 +18,8 @@ import '@quasar/extras/material-icons/material-icons.css'
 
 import '@quasar/extras/fontawesome-v5/fontawesome-v5.css'
 
+import '@quasar/extras/mdi-v4/mdi-v4.css'
+
 import '@quasar/extras/roboto-font/roboto-font.css'
 
 
@@ -44,9 +46,15 @@ import qboot_Bootaffix from 'boot/affix'
 
 import qboot_Bootauth from 'boot/auth'
 
+import qboot_Booti18n from 'boot/i18n'
+
+import qboot_Bootdarkmode from 'boot/darkmode'
+
 import qboot_Bootlodash from 'boot/lodash'
 
 import qboot_Bootsocketio from 'boot/socketio'
+
+import qboot_Bootsettings from 'boot/settings'
 
 
 
@@ -65,22 +73,29 @@ console.info('[Quasar] Running SPA.')
 
 
 
+const publicPath = `/`
+
+
 async function start () {
   const { app, router } = await createApp()
 
   
 
   
-  let routeUnchanged = true
+  let hasRedirected = false
   const redirect = url => {
-    routeUnchanged = false
-    window.location.href = url
+    hasRedirected = true
+    const normalized = Object(url) === url
+      ? router.resolve(url).route.fullPath
+      : url
+
+    window.location.href = normalized
   }
 
   const urlPath = window.location.href.replace(window.location.origin, '')
-  const bootFiles = [qboot_Bootaxios,qboot_Bootaffix,qboot_Bootauth,qboot_Bootlodash,qboot_Bootsocketio]
+  const bootFiles = [qboot_Bootaxios,qboot_Bootaffix,qboot_Bootauth,qboot_Booti18n,qboot_Bootdarkmode,qboot_Bootlodash,qboot_Bootsocketio,qboot_Bootsettings]
 
-  for (let i = 0; routeUnchanged === true && i < bootFiles.length; i++) {
+  for (let i = 0; hasRedirected === false && i < bootFiles.length; i++) {
     if (typeof bootFiles[i] !== 'function') {
       continue
     }
@@ -93,7 +108,8 @@ async function start () {
         Vue,
         ssrContext: null,
         redirect,
-        urlPath
+        urlPath,
+        publicPath
       })
     }
     catch (err) {
@@ -107,7 +123,7 @@ async function start () {
     }
   }
 
-  if (routeUnchanged === false) {
+  if (hasRedirected === true) {
     return
   }
   
@@ -118,7 +134,11 @@ async function start () {
 
     
 
-    new Vue(app)
+    
+      new Vue(app)
+    
+
+    
 
     
 

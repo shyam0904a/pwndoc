@@ -4,8 +4,11 @@ export default {
   getClients: function() {
     return Vue.prototype.$axios.get(`clients`)
   },
+  exportClients: function() {
+    return Vue.prototype.$axios.get(`clients/export`)
+  },
 
-  createClient: function(client) {
+  createClients: function(client) {
     return Vue.prototype.$axios.post('clients', client)
   },
 
@@ -15,5 +18,9 @@ export default {
 
   deleteClient: function(clientId) {
     return Vue.prototype.$axios.delete(`clients/${clientId}`)
+  },
+
+  deleteAllClients: function() {
+    return Vue.prototype.$axios.delete(`clients`)
   }
 }
