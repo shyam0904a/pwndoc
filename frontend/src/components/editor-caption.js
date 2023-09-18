@@ -11,10 +11,10 @@ export default Node.create({
   addAttributes() {
     return {
       label: {
-        default: "Figure"
+        default: "Figure",
       },
       alt: {
-        default: ""
+        default: "",
       }
     }
   },
@@ -25,7 +25,7 @@ export default Node.create({
         tag: "legend[alt]",
         getAttrs: dom => ({
           label: dom.getAttribute("label"),
-          alt: dom.getAttribute("alt")
+          alt: dom.getAttribute("alt"),
         })
       }
     ]
