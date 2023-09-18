@@ -27,6 +27,7 @@
     "@tiptap/extension-table-row": "^2.0.0-beta.22",
     "@tiptap/extension-underline": "2.0.0-beta.196",
     "@tiptap/starter-kit": "^2.0.0-beta.220",
+    "@tiptap/extension-text-align": "2.0.0-beta.217",
     "@tiptap/vue-2": "^2.0.0-beta.84",
     "axios": "^0.18.1",
     "core-js": "^3.9.0",
@@ -42,6 +43,7 @@
     "vue-lodash": "^2.0.0",
     "vue2-dragula": "^2.5.5",
     "vuedraggable": "^2.23.2",
+    "webpack-dev-server": "^3.11.3",
     "xml2js": "^0.6.2",
     "yjs": "^13.5.44"
   },
