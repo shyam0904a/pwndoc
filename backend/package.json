@@ -19,6 +19,7 @@
     "supertest": "^6.3.3"
   },
   "dependencies": {
+    "@hocuspocus/server": "^1.0.0",
     "angular-expressions": "^1.1.8",
     "bcrypt": "^5.1.0",
     "body-parser": "^1.20.2",
@@ -42,6 +43,7 @@
     "socket.io": "^4.6.1",
     "winston": "^3.8.2",
     "xml": "^1.0.1",
-    "swagger-autogen": "^2.23.1"
+    "swagger-autogen": "^2.23.1",
+    "http-proxy":"1.18.1"
   }
 }
