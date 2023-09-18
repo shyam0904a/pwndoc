@@ -36,7 +36,6 @@ async function generateDoc(audit) {
         }
         // return fs.readFileSync(tagValue, {encoding: 'base64'});
     }
-    console.log("woking till here 1");
     opts.getSize = function(img, tagValue, tagName) {
         if (img) {
             var sizeObj = sizeOf(img);
@@ -80,7 +79,6 @@ async function generateDoc(audit) {
     var doc = new Docxtemplater().attachModule(imageModule).loadZip(zip).setOptions({parser: parser, paragraphLoop: true});
     customGenerator.apply(preppedAudit);
     doc.setData(preppedAudit);
-
     try {
         doc.render();
     }

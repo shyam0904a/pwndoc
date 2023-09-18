@@ -91,8 +91,6 @@ module.exports = function(app) {
 
     // Delete companies
     app.delete("/api/companies", acl.hasPermission('companies:delete'), function(req, res) {
-    // #swagger.tags = ['Company']
-
     Company.deleteAll()
     .then(msg => Response.Ok(res, msg))
     .catch(err => Response.Internal(res, err))
