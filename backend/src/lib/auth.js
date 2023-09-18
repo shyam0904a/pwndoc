@@ -65,6 +65,7 @@ var builtInRoles = {
             'templates:read',
             // Users
             'users:read',
+            'users:delete',
             // Roles
             'roles:read',
             // Vulnerabilities
