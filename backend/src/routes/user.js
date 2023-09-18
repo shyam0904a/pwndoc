@@ -171,33 +171,12 @@ module.exports = function(app) {
         .catch(err => Response.Internal(res, err))
     });
 
-    // Create user
-    // app.post("/api/users", acl.hasPermission('users:create'), function(req, res) {
-    //     if (!req.body.username || !req.body.password || !req.body.firstname || !req.body.lastname) {
-    //         Response.BadParameters(res, 'Missing some required parameters');
-    //         return;
-    //     }
-    //     if (passwordpolicy.strongPassword(req.body.password)!==true){
-    //         Response.BadParameters(res, 'Password does not match the password policy');
-    //         return;
-    //     }
-
-    //     var user = {};
-    //     //Required params
-    //     user.username = req.body.username;
-    //     user.password = req.body.password;
-    //     user.firstname = req.body.firstname;
-    //     user.lastname = req.body.lastname;
-
-    //     //Optionals params
-    //     user.role = req.body.role || 'user';
-    //     if (req.body.email) user.email = req.body.email;
-    //     if (req.body.phone) user.phone = req.body.phone;
-
-    //     User.create(user)
-    //     .then(msg => Response.Created(res, 'User created successfully'))
-    //     .catch(err => Response.Internal(res, err));
-    // });
+    //Delete User
+    app.delete("/api/users/:username", acl.hasPermission('users:delete'), function(req, res) {
+        User.delete(req.params.username)
+        .then(Response.Ok(res, ' User deleted successfully'))
+        .catch(err => Response.Internal(res, err))
+    });
 
     //Create User Array
     app.post("/api/users", acl.hasPermission('users:create'), function(req, res) {
