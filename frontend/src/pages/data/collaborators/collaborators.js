@@ -146,6 +146,39 @@ export default {
             })
         },
 
+        deleteCollab: function(collabid) {
+            console.log(collabid)
+            CollabService.deleteCollab(collabid)
+            .then(() => {
+                this.getCollabs();
+                Notify.create({
+                    message: $t('msg.collaboratorDeletedOk'),
+                    color: 'positive',
+                    textColor:'white',
+                    position: 'top-right'
+                })
+            })
+            .catch((err) => {
+                Notify.create({
+                    message: err.response.data.datas,
+                    color: 'negative',
+                    textColor:'white',
+                    position: 'top-left'
+                })
+            })
+        },
+
+        confirmDeleteUser: function(collab) {
+            console.log(collab)
+            Dialog.create({
+                title: $t('msg.confirmSuppression'),
+                message: `${$t('client')} ${collab.firstname} ${collab.lastname} ${$t('msg.deleteNotice')}`,
+                ok: {label: $t('btn.confirm'), color: 'negative'},
+                cancel: {label: $t('btn.cancel'), color: 'white'}
+            })
+            .onOk(() => this.deleteCollab(collab._id))
+        },
+
         getRoles: function() {
             DataService.getRoles()
             .then((data) => {
