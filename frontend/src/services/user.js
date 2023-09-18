@@ -98,10 +98,6 @@ export default {
         return (this.user.roles && (this.user.roles.includes(role) || this.user.roles === '*'))
     },
 
-    exportUsers: function() {
-        return Vue.prototype.$axios.get(`users/export`)
-    },
-    
     getProfile: function() {
         return Vue.prototype.$axios.get(`users/me`);
     },

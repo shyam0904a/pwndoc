@@ -58,7 +58,7 @@ export default TipTapImage.extend({
           },
           handlePaste(view,event){
             var isImage = false
-            var file = event.clipboardData.items[0]
+            var file = event.clipboardData.files[0]
 
             var auditId = null
             var path = window.location.pathname.split('/')
@@ -66,7 +66,6 @@ export default TipTapImage.extend({
               auditId = path[2]
 
             if (file && file.type.startsWith("image")) {
-              var blob = file.getAsFile()
               isImage = true
               var fileReader = new FileReader()
 
@@ -76,14 +75,14 @@ export default TipTapImage.extend({
                   return ImageService.createImage({value: data, name: file.name, auditId: auditId})
                 })
                 .then((data) => {
-                  const node = view.state.schema.nodes.image.create({src: data.data.datas._id, alt: file.name || "",})
+                  const node = view.state.schema.nodes.image.create({src: data.data.datas._id, alt: file.name})
                   const transaction = view.state.tr.replaceSelectionWith(node)
                   view.dispatch(transaction)
                 })
                 .catch(err => console.log(err))
               }
 
-              fileReader.readAsDataURL(blob);
+              fileReader.readAsDataURL(file);
             }
             
             if (isImage) {

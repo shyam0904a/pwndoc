@@ -20,8 +20,9 @@ module.exports = function (ctx) {
     ],
     extras: [
       'material-icons',
-      'fontawesome-v5',
-      'mdi-v4',
+      'material-symbols-outlined',
+      'fontawesome-v6',
+      'mdi-v7',
       'roboto-font'
     ],
     build: {
@@ -56,12 +57,6 @@ module.exports = function (ctx) {
         '/api': {
           target: 'https://pwndoc-backend:5252',
           changeOrigin: true,
-          secure: false
-        },
-        '/collab': {
-          target: 'ws://pwndoc-backend:8440/',
-          changeOrigin: true,
-          ws: true,
           secure: false
         }
       }

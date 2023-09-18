@@ -9,9 +9,6 @@
  *
  * Boot files are your "main.js"
  **/
-
-
-
 import Vue from 'vue'
 import './import-quasar.js'
 
@@ -21,6 +18,7 @@ import App from 'app/src/App.vue'
 
 
 import createRouter from 'app/src/router/index'
+
 
 
 
@@ -37,14 +35,12 @@ export default async function () {
   // Here we inject the router, store to all child components,
   // making them available everywhere as `this.$router` and `this.$store`.
   const app = {
+    el: '#q-app',
     router,
     
     render: h => h(App)
   }
 
-
-  
-  app.el = '#q-app'
   
 
   // expose the app, the router and the store.

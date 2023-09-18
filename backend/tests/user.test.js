@@ -102,7 +102,7 @@ module.exports = function(request, app) {
           .set('Cookie', [
             `token=JWT ${userToken}`
           ])
-          .send([user])
+          .send(user)
 
         expect(response.status).toBe(201)
 
@@ -121,7 +121,8 @@ module.exports = function(request, app) {
           .set('Cookie', [
             `token=JWT ${userToken}`
           ])
-          .send([user])
+          .send(user)
+
         expect(response.status).toBe(201)
 
         response = await request(app).post('/api/users/token').send(user)
@@ -140,7 +141,8 @@ module.exports = function(request, app) {
           .set('Cookie', [
             `token=JWT ${userToken}`
           ])
-          .send([user])
+          .send(user)
+
         expect(response.status).toBe(201)
 
         response = await request(app).post('/api/users/token').send(user)
@@ -159,7 +161,8 @@ module.exports = function(request, app) {
           .set('Cookie', [
             `token=JWT ${userToken}`
           ])
-        .send([user])          
+          .send(user)
+          
         expect(response.status).toBe(201)
 
         response = await request(app).post('/api/users/token').send(user)

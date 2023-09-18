@@ -90,7 +90,7 @@ buttons
                     lazy-rules="ondemand"
                     >
                         <template v-slot="control">
-                            <basic-editor ref="basiceditor_description" idUnique="basiceditor_description" noSync v-model="finding.description" :editable="frontEndAuditState === AUDIT_VIEW_STATE.EDIT"/>
+                            <basic-editor ref="basiceditor_description" noSync v-model="finding.description" :editable="frontEndAuditState === AUDIT_VIEW_STATE.EDIT"/>
                         </template>
                         <template v-slot:label>
                             {{$t('description')}} <span v-if="$settings.report.public.requiredFields.findingDescription" class="text-red">*</span>
@@ -106,7 +106,7 @@ buttons
                     lazy-rules="ondemand"
                     >
                         <template v-slot="control">
-                            <basic-editor ref="basiceditor_observation" idUnique="basiceditor_observation" noSync v-model="finding.observation" :editable="frontEndAuditState === AUDIT_VIEW_STATE.EDIT"/>
+                            <basic-editor ref="basiceditor_observation" noSync v-model="finding.observation" :editable="frontEndAuditState === AUDIT_VIEW_STATE.EDIT"/>
                         </template>
                         <template v-slot:label>
                             {{$t('observation')}} <span v-if="$settings.report.public.requiredFields.findingObservation" class="text-red">*</span>
@@ -154,7 +154,7 @@ buttons
                             lazy-rules="ondemand"
                             >
                                 <template v-slot="control">
-                                    <basic-editor ref="basiceditor_poc" idUnique="basiceditor_poc" noSync v-model="finding.poc" :editable="frontEndAuditState === AUDIT_VIEW_STATE.EDIT"/>
+                                    <basic-editor ref="basiceditor_poc" noSync v-model="finding.poc" :editable="frontEndAuditState === AUDIT_VIEW_STATE.EDIT"/>
                                 </template>
                                 <template v-slot:label>
                                     {{$t('proofs')}} <span v-if="$settings.report.public.requiredFields.findingProofs" class="text-red">*</span>
@@ -178,7 +178,7 @@ buttons
                     lazy-rules="ondemand"
                     >
                         <template v-slot="control">
-                            <basic-editor v-model="finding.scope" idUnique="basiceditor_scope" :editable="frontEndAuditState === AUDIT_VIEW_STATE.EDIT"/>
+                            <basic-editor v-model="finding.scope" :toolbar="['format', 'marks', 'list']" :editable="frontEndAuditState === AUDIT_VIEW_STATE.EDIT"/>
                         </template>
                         <template v-slot:label>
                             {{$t('affectedAssets')}} <span v-if="$settings.report.public.requiredFields.findingAffected" class="text-red">*</span>
@@ -250,7 +250,7 @@ buttons
                     lazy-rules="ondemand"
                     >
                         <template v-slot="control">
-                            <basic-editor ref="basiceditor_remediation" idUnique="basiceditor_remediation" noSync v-model="finding.remediation" :editable="frontEndAuditState === AUDIT_VIEW_STATE.EDIT"/>
+                            <basic-editor ref="basiceditor_remediation" noSync v-model="finding.remediation" :editable="frontEndAuditState === AUDIT_VIEW_STATE.EDIT"/>
                         </template>
                         <template v-slot:label>
                             {{$t('remediation')}} <span v-if="$settings.report.public.requiredFields.findingRemediation" class="text-red">*</span>
