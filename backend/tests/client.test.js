@@ -73,7 +73,7 @@ module.exports = function(request, app) {
           .set('Cookie', [
             `token=JWT ${userToken}`
           ])
-          .send(client)
+          .send([client])
         expect(response.status).toBe(201)
         client2Id = response.body.datas._id
       })
@@ -87,7 +87,7 @@ module.exports = function(request, app) {
           .set('Cookie', [
             `token=JWT ${userToken}`
           ])
-          .send(client)
+          .send([client])
         expect(response.status).toBe(201)
         client3Id = response.body.datas._id
       })
@@ -98,7 +98,7 @@ module.exports = function(request, app) {
           .set('Cookie', [
             `token=JWT ${userToken}`
           ])
-          .send(client)
+          .send([client])
 
         expect(response.status).toBe(422)
       })
@@ -109,7 +109,7 @@ module.exports = function(request, app) {
           .set('Cookie', [
             `token=JWT ${userToken}`
           ])
-          .send(client)
+          .send([client])
 
         expect(response.status).toBe(422)
       })
@@ -146,6 +146,13 @@ module.exports = function(request, app) {
           title: t.title,
           company: t.company
         }})).toEqual(expect.arrayContaining(expected))
+        var clientsids = {}
+        clientsids[response.body.datas[0]['email']] = response.body.datas[0]._id;
+        clientsids[response.body.datas[1]['email']] = response.body.datas[1]._id;
+        clientsids[response.body.datas[2]['email']] = response.body.datas[2]._id;
+        client1Id = clientsids['client1@example.com'];
+        client2Id = clientsids['client2@example.com'];
+        client3Id = clientsids['client3@example.com'];
       })
 
       it('Update client', async () => {
