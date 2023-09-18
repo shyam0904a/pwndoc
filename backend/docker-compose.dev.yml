@@ -18,6 +18,7 @@ services:
     build: 
       context: .
       dockerfile:  Dockerfile.dev
+      no_cache: true
     image: yeln4ts/pwndoc:backend-dev
     container_name: pwndoc-backend-dev
     volumes:
