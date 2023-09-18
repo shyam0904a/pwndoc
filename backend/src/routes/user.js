@@ -8,6 +8,14 @@ module.exports = function(app) {
     var _ = require('lodash')
     var passwordpolicy = require('../lib/passwordpolicy')
 	
+
+    app.get("/api/users/export", acl.hasPermission('users:read-all'), function(req, res) {
+        // #swagger.tags = ['User']
+
+        User.export()
+        .then(msg => Response.Ok(res, msg))
+        .catch(err => Response.Internal(res, err))
+    });
     // Check token validity
     app.get("/api/users/checktoken", acl.hasPermission('validtoken'), function(req, res) {
         Response.Ok(res, req.cookies['token']);
@@ -164,31 +172,66 @@ module.exports = function(app) {
     });
 
     // Create user
+    // app.post("/api/users", acl.hasPermission('users:create'), function(req, res) {
+    //     if (!req.body.username || !req.body.password || !req.body.firstname || !req.body.lastname) {
+    //         Response.BadParameters(res, 'Missing some required parameters');
+    //         return;
+    //     }
+    //     if (passwordpolicy.strongPassword(req.body.password)!==true){
+    //         Response.BadParameters(res, 'Password does not match the password policy');
+    //         return;
+    //     }
+
+    //     var user = {};
+    //     //Required params
+    //     user.username = req.body.username;
+    //     user.password = req.body.password;
+    //     user.firstname = req.body.firstname;
+    //     user.lastname = req.body.lastname;
+
+    //     //Optionals params
+    //     user.role = req.body.role || 'user';
+    //     if (req.body.email) user.email = req.body.email;
+    //     if (req.body.phone) user.phone = req.body.phone;
+
+    //     User.create(user)
+    //     .then(msg => Response.Created(res, 'User created successfully'))
+    //     .catch(err => Response.Internal(res, err));
+    // });
+
+    //Create User Array
     app.post("/api/users", acl.hasPermission('users:create'), function(req, res) {
-        if (!req.body.username || !req.body.password || !req.body.firstname || !req.body.lastname) {
-            Response.BadParameters(res, 'Missing some required parameters');
-            return;
+        // #swagger.tags = ['User']
+
+        var users = [];
+        for (var i=0; i< req.body.length;i++) {
+            var usr = req.body[i]
+
+            if (!usr.username || !usr.password || !usr.firstname || !usr.lastname) {
+                Response.BadParameters(res, 'Missing some required parameters');
+                return;
+            }
+            if (passwordpolicy.strongPassword(usr.password)!==true){
+                Response.BadParameters(res, 'Password does not match the password policy');
+                return;
+            }
+
+            var user = {};
+            //Required params
+            user.username = usr.username;
+            user.password = usr.password;
+            user.firstname = usr.firstname;
+            user.lastname = usr.lastname;
+
+            //Optionals params
+            user.role = usr.role || 'user';
+            if (usr.email) user.email = usr.email;
+            if (usr.phone) user.phone = usr.phone;
+            users.push(user)
         }
-        if (passwordpolicy.strongPassword(req.body.password)!==true){
-            Response.BadParameters(res, 'Password does not match the password policy');
-            return;
-        }
-
-        var user = {};
-        //Required params
-        user.username = req.body.username;
-        user.password = req.body.password;
-        user.firstname = req.body.firstname;
-        user.lastname = req.body.lastname;
-
-        //Optionals params
-        user.role = req.body.role || 'user';
-        if (req.body.email) user.email = req.body.email;
-        if (req.body.phone) user.phone = req.body.phone;
-
-        User.create(user)
-        .then(msg => Response.Created(res, 'User created successfully'))
-        .catch(err => Response.Internal(res, err));
+        User.create(users)
+        .then(msg => Response.Created(res, msg))
+        .catch(err => Response.Internal(res, err))
     });
 
     // Create First User
@@ -212,8 +255,8 @@ module.exports = function(app) {
         User.getAll()
         .then(users => {
             if (users.length === 0)
-                User.create(user)
-                .then(msg => {
+            User.create([user])                
+            .then(msg => {
                     var newUser = new User();
                     //Required params
                     newUser.username = req.body.username;
