@@ -12,7 +12,7 @@ export default [
         {path: 'findings/add', name: 'addFindings', component: () => import('pages/audits/edit/findings/add')},
         {path: 'findings/:findingId', name: 'editFinding', component: () => import('pages/audits/edit/findings/edit')},
         {path: 'sections/:sectionId', name: 'editSection', component: () => import('pages/audits/edit/sections')},
-        {path: 'audits/add', name: 'addAudits', component: () => import('pages/audits/edit/add-audits')}
+        {path: 'audits/add', name: 'addAudits', component: () => import('pages/audits/edit/add-audits')},
       ]}
     ]},
     {path: 'data', component: () => import('pages/data'), meta: {breadcrumb: 'Datas'}, children: [
@@ -28,7 +28,8 @@ export default [
     {path: 'profile', component: () => import('pages/profile')},
     {path: 'settings', component: () => import('pages/settings')},
     {path: '403', name: '403', component: () => import('pages/403')},
-    {path: '404', name: '404', component: () => import('pages/404')}
+    {path: '404', name: '404', component: () => import('pages/404')},
+    {path: 'dashboard', name: 'viewdashboard', component: () => import('pages/dashboard/index')}
   ]},
   {path: '/login', component: () => import('pages/login')},
   {path: '*', redirect: '/'}

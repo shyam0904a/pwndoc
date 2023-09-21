@@ -4,6 +4,13 @@
         <q-toolbar class="bg-fixed-primary">
             <img src="pwndoc-logo-white.png" style="max-height:50px;" />
             
+            <q-item to='/dashboard' active-class="text-green">
+            <q-item-section avatar style="min-width:0" class="q-pr-sm">
+                <q-icon name="fa fa-shield-alt" />
+            </q-item-section>
+            <q-item-section>{{$t('Dashboard')}}</q-item-section>
+            </q-item>
+
             <q-item to='/audits' active-class="text-green">
             <q-item-section avatar style="min-width:0" class="q-pr-sm">
                 <q-icon name="fa fa-fingerprint" />

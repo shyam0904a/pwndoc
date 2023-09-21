@@ -1,7 +1,7 @@
 <template>
 <div>
     <q-drawer side="left" :value="true">
-        <q-list class="home-drawer">
+        <q-list class="topbar-background rounded-borders">
             <q-item-label header>{{$t('handleCustomData')}}</q-item-label>
         
             <q-separator />
@@ -67,4 +67,29 @@ export default {
     }
 }
 </script>
+
+<style lang="stylus">
+/*.topbar-background-drawer>.q-list>.q-link:hover:after,
+.topbar-background>.q-router-link--active:after,
+.topbar-background>.q-item--active:after {
+    --color: #77C84E;
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 5px;
+    height: 100%;
+    background: var(--color);
+}*/
+
+.topbar-background .q-router-link--active {
+    background-color: $primary;
+    opacity: 0.9;
+    background: linear-gradient(316deg, #310e68 0%, #5f0f40 74%);
+	color: white!important;
+    border-radius 20px;
+}
+
+</style>
 
