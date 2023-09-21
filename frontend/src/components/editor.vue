@@ -1035,6 +1035,7 @@
   }
   
   .editor {
+    background: black;
     &__content {
       overflow-wrap: break-word;
       word-wrap: break-word;

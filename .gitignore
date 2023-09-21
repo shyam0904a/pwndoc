@@ -23,6 +23,7 @@ app-settings.json
 *.ntvs*
 *.njsproj
 *.sln
+.vs
 
 # Version managers
 .tool-versions

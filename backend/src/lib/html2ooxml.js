@@ -18,8 +18,8 @@ function html2ooxml(html, style = "") {
   let tmpAttribs = {};
   let tableHeader = false
   let tmpTable = [];
-  let alignstatus = ''; // Corrected variable name
-
+  let tmpCells=[];
+  
 let parser = new htmlparser.Parser({
   alignstatus: '', // Initial value
   onopentag(tag, attribs) {
