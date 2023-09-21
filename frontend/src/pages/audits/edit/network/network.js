@@ -132,6 +132,7 @@ export default {
 
         // Import Network scan
         importNetworkScan: function(files, type) {
+            console.log("in import scan")
             var file = files[0];
             var fileReader = new FileReader();
 
@@ -147,6 +148,7 @@ export default {
 
         updateScopeHosts: function(scope) {
             for (var i=0; i<this.selectedTargets[scope.name].length; i++) {
+                console.log(this.selectedTargets[scope.name][i].host);
                 scope.hosts.push(this.selectedTargets[scope.name][i].host);
             }
         },

@@ -1,9 +1,10 @@
 <template>
 <div>
-	<q-drawer side="left" :value="true" :width="400">
-		<q-splitter horizontal v-model="splitterRatio" :limits="[50, 80]" style="height: 100%">
+          
+		  <q-drawer side="left" :value="true" :width="325" bordered>
+		<q-splitter horizontal v-model="splitterRatio" :limits="[40, 80]" style="height: 100%">
 			<template v-slot:before>
-				<q-list class="home-drawer">
+				<q-list  class="topbar-background rounded-borders no-outline">
 					<q-item style="padding:0px">
 						<q-item-section avatar v-if="audit.type === 'multi'">
 							<q-chip square size="md" outline color="green" :label="$t('multi')" />
@@ -12,7 +13,7 @@
 							<q-chip square outline color="orange" :label="$t('retest')" />
 						</q-item-section>
 						<q-item-section avatar v-else>
-							<q-chip square size="md" outline color="info" :label="$t('audit')" />
+							<q-chip  size="md" outline color="info" :label="$t('audit')" />
 						</q-item-section>
 						<q-item-section />
 						<template v-if="audit.type == 'default'">
@@ -33,9 +34,10 @@
 								<q-btn
 								v-else
 								class="q-mx-xs q-px-xs"
-								size="11px"
+								size="14px"
 								unelevated
 								dense
+								rounded
 								color="secondary"
 								:label="$t('btn.topButtonSection.createRetest')"
 								no-caps
@@ -75,43 +77,45 @@
 							</q-item-section>
 						</template>
 						<q-item-section side class="topButtonSection">
-							<q-btn flat color="info" @click="generateReport">
+							<q-btn rounded flat color="info" @click="generateReport">
 								<q-tooltip anchor="bottom middle" self="center left" :delay="500" content-class="text-bold">{{$t('tooltip.downloadReport')}}</q-tooltip> 
 								<i class="fa fa-download fa-lg"></i>
 							</q-btn>
 						</q-item-section>
 					</q-item>
 
-					<q-item :to='"/audits/"+auditId+"/general"'>
+					<q-item exact bordered :to='"/audits/"+auditId+"/general"' @click="toogleisActive">
 						<q-item-section avatar>
-							<q-icon name="fa fa-cog"></q-icon>
+							<q-icon 
+							size="xs"
+							name="fa fa-cog"
+							>
+							</q-icon>
 						</q-item-section>
-						<q-item-section>{{$t('generalInformation')}}</q-item-section>
+						<q-item-section>
+							{{$t('generalInformation')}}
+						</q-item-section>
 					</q-item>
 					
 					<div class="row">
 						<div v-for="(user,idx) in generalUsers" :key="idx" class="col multi-colors-bar" :style="{background:user.color}" />
 					</div>
 
-					<q-item
-					v-if="!currentAuditType || !currentAuditType.hidden.includes('network')"
-					:to="'/audits/'+auditId+'/network'"
+
+
+					<q-item v-ripple v-if="!currentAuditType || !currentAuditType.hidden.includes('network')" :to="'/audits/'+auditId+'/network'"
 					>
 						<q-item-section avatar>
-							<q-icon name="fa fa-globe"></q-icon>
+							<q-icon size="xs" name="fa fa-globe"></q-icon>
 						</q-item-section>
 						<q-item-section>{{$t('networkScan')}}</q-item-section>
 					</q-item>
-
-					<div class="row">
-						<div v-for="(user,idx) in networkUsers" :key="idx" class="col multi-colors-bar" :style="{background:user.color}" />
-					</div>
 
 					<div v-if="!currentAuditType || !currentAuditType.hidden.includes('findings')">
 						<q-separator class="q-my-sm" />
 						<q-item>
 							<q-item-section avatar>
-								<q-icon name="fa fa-list"></q-icon>
+								<q-icon size="xs" name="fa fa-bug"></q-icon>
 							</q-item-section>
 							<q-item-section v-if="audit.type === 'multi'">{{$t('audits')}} ({{audit.findings.length || 0}})</q-item-section>
 							<q-item-section v-else>{{$t('findings')}} ({{audit.findings.length || 0}})</q-item-section>
@@ -162,7 +166,7 @@
 						</div>
 						<div v-else>
 							<div v-for="categoryFindings of findingList" :key="categoryFindings.category">
-								<q-item>
+								<q-item dense>
 									<q-item-section>
 										<q-item-label header>{{categoryFindings.category}}</q-item-label>
 									</q-item-section>
@@ -240,7 +244,7 @@
 											:to="'/audits/'+auditId+'/findings/'+finding._id"
 											>
 												<q-item-section side v-if="!categoryFindings.sortOption.sortAuto && frontEndAuditState === AUDIT_VIEW_STATE.EDIT">
-													<q-icon name="mdi-arrow-split-horizontal" class="cursor-pointer handle" color="grey" />
+													<q-icon size="xs" name="mdi-arrow-split-horizontal" class="cursor-pointer handle" color="grey" />
 												</q-item-section>
 												<q-item-section side>
 													<q-chip
@@ -254,11 +258,11 @@
 													<span>{{finding.title}}</span>
 												</q-item-section>
 												<q-item-section side>
-													<q-icon v-if="audit.type === 'default' && finding.status === 0" name="check" color="green" />
-													<q-icon v-else-if="audit.type === 'retest' && finding.retestStatus === 'ok'" name="check" color="green" />
-													<q-icon v-else-if="audit.type === 'retest' && finding.retestStatus === 'ko'" name="fas fa-xmark" color="red" />
-													<q-icon v-else-if="audit.type === 'retest' && finding.retestStatus === 'partial'" name="priority_high" color="orange" />
-													<q-icon v-else-if="audit.type === 'retest' && finding.retestStatus === 'unknown'" name="question_mark" color="brown" />
+													<q-icon size="xs" v-if="audit.type === 'default' && finding.status === 0" name="check" color="green" />
+													<q-icon size="xs" v-else-if="audit.type === 'retest' && finding.retestStatus === 'ok'" name="check" color="green" />
+													<q-icon size="xs" v-else-if="audit.type === 'retest' && finding.retestStatus === 'ko'" name="fas fa-xmark" color="red" />
+													<q-icon size="xs" v-else-if="audit.type === 'retest' && finding.retestStatus === 'partial'" name="priority_high" color="orange" />
+													<q-icon size="xs" v-else-if="audit.type === 'retest' && finding.retestStatus === 'unknown'" name="question_mark" color="brown" />
 												</q-item-section>
 											</q-item>
 											<div class="row">
@@ -275,7 +279,7 @@
 					<q-list v-for="section of audit.sections" :key="section._id">
 						<q-item :to="'/audits/'+auditId+'/sections/'+section._id">
 							<q-item-section avatar>
-								<q-icon :name="getSectionIcon(section)"></q-icon>
+								<q-icon size="xs" :name="getSectionIcon(section)"></q-icon>
 							</q-item-section>
 							<q-item-section>
 								<span>{{section.name}}</span>
@@ -288,15 +292,15 @@
 				</q-list>
 			</template>
 			<template v-slot:after>
-				<q-list>
+				<q-list bordered>
 					<q-separator />
-					<q-item class="q-py-lg">
+					<q-item class="q-pa-md" dense>
 						<q-item-section avatar>
-							<q-icon name="fa fa-user"></q-icon>
+							<q-icon size="xs" name="fa fa-user"></q-icon>
 						</q-item-section>
 						<q-item-section>{{$t('usersConnected')}}</q-item-section>	
 					</q-item>
-					<q-list dense>
+					<q-list dense bordered >
 						<q-item v-for="user of users" :key="user._id">
 							<q-item-section side>
 								<q-chip :style="{'background-color':user.color}" square size="sm" />
@@ -312,6 +316,7 @@
 			
 		</q-splitter>
 	</q-drawer>
+
 	<router-view :key="$route.fullPath" :frontEndAuditState="frontEndAuditState" :parentState="audit.state" :parentApprovals="audit.approvals" />
 	</div>
 </template>
@@ -326,8 +331,10 @@ import DataService from '@/services/data';
 import Utils from '@/services/utils';
 
 import { $t } from '@/boot/i18n';
-
+import { ref } from "vue"
+ 
 export default {
+
 		data () {
 			return {
 				auditId: "",
@@ -348,13 +355,17 @@ export default {
 				retestSplitView: false,
 				retestSplitRatio: 100,
 				retestSplitLimits: [100, 100],
-				children: []
+				children: [],
+				isclicked: true,
+				drawer: ref(false),
+                miniState: ref(false)
 			}
 		},
 
 		components: {
 			draggable
 		},
+
 
 		created: function() {
 			this.auditId = this.$route.params.auditId;
@@ -419,6 +430,11 @@ export default {
 		},
 
 		methods: {
+			
+			toogleisActive() {
+      			this.isclicked = !this.isclicked;
+			},
+
 			getFindingColor: function(finding) {
 				let severity = this.getFindingSeverity(finding)
 
@@ -863,7 +879,7 @@ export default {
 
 .q-menu > .q-item--active {
 		color: white;
-		background-color: $blue-14;
+		background-color: purple-8;
 }
 
 .card-screenshots {
@@ -881,7 +897,8 @@ export default {
 }
 
 .multi-colors-bar {
-	height: 5px;
+	height: 2px;
+	background-color: purple-8;
 }
 
 .drawer-footer {
@@ -900,5 +917,36 @@ export default {
 .topButtonSection {
     padding-left: 0px!important;
 	padding-right: 0px!important;
+}
+
+
+/*.topbar-background-drawer>.q-list>.q-link:hover:after,
+.topbar-background>.q-router-link--active:after,
+.topbar-background>.q-item--active:after {
+    --color: #77C84E;
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 5px;
+    height: 100%;
+    background: var(--color);
+}*/
+
+.topbar-background .q-router-link--active {
+    background-color: $primary;
+    opacity: 0.9;
+    background: linear-gradient(316deg, #310e68 0%, #5f0f40 74%);
+	color: white!important;
+	border-radius 20px;
+}
+
+.active-status {
+	position: absolute;
+	top: 40%; /* Vertically centered */
+	right: 10px; /* Adjust the right position as needed */
+	width: 40px; /* Adjust the size of the dot */
+	height: 40px;
 }
 </style>

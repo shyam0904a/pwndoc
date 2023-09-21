@@ -19,7 +19,7 @@ export default {
             cancelReview: 'Cancel Review',
             approve: 'Approve',
             removeApproval: 'Remove Approval',
-            createRetest: 'Create Retest',
+            createRetest: 'Retest',
             navigateRetest: 'Access Retest'
         },
         backupFinding: "Propose Creation / Update in Vulnerability Database",
