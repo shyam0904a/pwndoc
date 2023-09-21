@@ -70,7 +70,7 @@
                 </q-card-section>
 
                 <q-card-section align="center">
-                    <q-btn color="blue" class="full-width" unelevated no-caps @click="initUser()">{{$t('registerFirstUser')}}</q-btn>
+                    <q-btn rounded color="deep-purple-7" class="full-width" unelevated no-caps @click="initUser()">{{$t('registerFirstUser')}}</q-btn>
                 </q-card-section>
             </div>
             
@@ -144,7 +144,7 @@
                 </q-card-section>
 
                 <q-card-section align="center">
-                    <q-btn :loading="loginLoading" color="blue" class="full-width" unelevated no-caps @click="getToken()">{{$t('login')}}</q-btn>
+                    <q-btn rounded :loading="loginLoading" color="deep-purple-7" class="full-width" ripple unelevated no-caps @click="getToken()">{{$t('login')}}</q-btn>
                 </q-card-section>
             </div>
         </q-card>
@@ -278,7 +278,9 @@ export default {
 
 <style lang="stylus">
 .login-background {
-    background: linear-gradient(45deg, $blue, transparent)
+    background: rgb(131,58,180);
+    background: linear-gradient(316deg, #310e68 0%, #5f0f40 74%);
+ 
 }
 
 .loading p {
